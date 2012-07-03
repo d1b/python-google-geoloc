@@ -13,12 +13,7 @@ of your city.
 
 import urllib2
 from sys import argv
-try:
-	# py >=2.6
-	import json
-except ImportError:
-	# py <=2.5 requires third party module
-	import simplejson as json
+import json
 
 
 def request_loc(bssid):
