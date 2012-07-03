@@ -21,19 +21,20 @@ def request_loc(bssid):
 		'version': '1.1.0',
 		'request_address': True,
 		'address_language': 'en',
-		'wifi_towers': [
-			{
-				'mac_address': bssid.replace(':', '-'),
-				'signal_strength': 1
-			},
-		]
+		'wifi_towers': []
 	}
+	
+	for b in bssid:
+		loc_req['wifi_towers'].append({
+			'mac_address': b.replace(':', '-'),
+			'signal_strength': 1
+		})
 
 	data = json.dumps(loc_req)
 	return urllib2.urlopen('https://www.google.com/loc/json', data).read()
 
 
-def print_loc(bssid):
+def print_loc(*bssid):
 	loc_json = json.loads(request_loc(bssid))
 	print bssid,
 	try:
@@ -49,12 +50,22 @@ def print_loc(bssid):
 
 	print ""
 
-if __name__ == "__main__":
+	
+def main():
 	if len(argv) == 1:
 		# test mode
 		nets = ['00:88:88:88:00:2A', '00:88:88:88:00:2B']
+	elif argv[1].lower() == '--triangulate':
+		# display data using all of the mac addresses at once.
+		print "Using triangulate mode."
+		print_loc(*argv[2:])
+		return
 	else:
 		nets = argv[1:]
 
 	for line in nets:
 		print_loc(line)
+
+
+if __name__ == "__main__":
+	main()
