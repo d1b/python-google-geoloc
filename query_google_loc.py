@@ -20,7 +20,7 @@ except ImportError:
 	# py <=2.5 requires third party module
 	import simplejson as json
 
-	
+
 def request_loc(bssid):
 	loc_req = {
 		'version': '1.1.0',
@@ -33,25 +33,25 @@ def request_loc(bssid):
 			},
 		]
 	}
-	
+
 	data = json.dumps(loc_req)
 	return urllib2.urlopen('https://www.google.com/loc/json', data).read()
 
-	
+
 def print_loc(bssid):
 	loc_json = json.loads(request_loc(bssid))
 	print bssid,
 	try:
 		print ("%(city)s, %(country)s" % loc_json['location']['address']),
 		print "(%sm)" % loc_json['location']['accuracy']
-		
 	except KeyError, e:
 		pass
+
 	print loc_json['location']
-	
+
 	if loc_json['location']['accuracy'] >= 15000:
 		print "# Accuracy of 15km or higher seems to indicate unknown location..."
-	
+
 	print ""
 
 if __name__ == "__main__":
@@ -60,6 +60,6 @@ if __name__ == "__main__":
 		nets = ['00:88:88:88:00:2A', '00:88:88:88:00:2B']
 	else:
 		nets = argv[1:]
-		
+
 	for line in nets:
 		print_loc(line)
